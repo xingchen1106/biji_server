@@ -212,6 +212,10 @@ function M:notify_result()
     table.sort(ids, self.compare3);
     table.insert(result, self:getScoreList(ids));
 
+    local base_app = skynet.queryservice("base_app")
+    for _,player in ipairs(self.player_list) do
+        skynet.call(base_app, "lua", "sendto_client", player.account, "GAME_RESULT", result)
+    end
 end
 
 function M:pack()

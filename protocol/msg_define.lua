@@ -15,6 +15,7 @@ local id_tbl = {
     -- 游戏
     {name = "GAME_DEAL_CARD"},                          -- 发牌
     {name = "GAME_CARD_SOLUTION"},                      -- 打牌
+    {name = "GAME_RESULT"},                             -- 结果
 }
 
 local error_tbl = {
