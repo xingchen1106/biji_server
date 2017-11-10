@@ -17,6 +17,16 @@ local id_tbl = {
     {name = "GAME_CARD_SOLUTION"},                      -- 打牌
 }
 
+local error_tbl = {
+    ["INDEXS_ERROR"] = 1100,
+
+}
+
+function M.getError(name)
+    return error_tbl[name]
+end
+
+
 
 local name_tbl = {}
 

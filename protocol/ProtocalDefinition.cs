@@ -15,3 +15,8 @@ public enum eProtocalCommand
 	GAME_DEAL_CARD      	= 8,
 	GAME_CARD_SOLUTION  	= 9,
 }
+
+public enum eErrorCode
+{
+    INDEXS_ERROR 			= 1100,
+}

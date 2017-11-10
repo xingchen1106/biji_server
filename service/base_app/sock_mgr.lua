@@ -89,6 +89,7 @@ function M:send(fd, proto_name, msg)
     skynet.error("send msg:"..str)
     socket.write(fd, packer.pack(proto_id, msg))
 end
+
 -------------------网络消息回调函数结束------------------
 
 return M
