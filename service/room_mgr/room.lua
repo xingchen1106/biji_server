@@ -24,6 +24,7 @@ function M:init(id, game_id, player_info)
     self.player_state = {[player_info.account] = true}
     self.player_cards = {}
     self.player_score = {}
+    self.turn = 0
     self.player_solutions = {}
     self.ready = false
     self.getting_area = false
@@ -85,12 +86,13 @@ end
 
 
 -- 发牌
-function M:deal_card(account)
+function M:deal_card(player_info)
+    -- TODO 检查是否是房主
 
     local cards = {}
     for i = 0,3 do
         for j = 1,13 do
-            cards.insert(i<<8 + j);
+            table.insert(cards,i*256 + j)
         end
     end
 
@@ -99,12 +101,20 @@ function M:deal_card(account)
     end
 
     local base_app = skynet.queryservice("base_app")
-    for _,player in ipairs(self.player_list) do
+    for i,player in ipairs(self.player_list) do
         self.player_cards[player.account] = {}
         self.player_solutions[player.account] = nil
 
-        table.move(cards,1,ONE_GROUP_CARD_NUM,1,self.player_cards[player.account])
-        skynet.call(base_app, "lua", "sendto_client", player.account, "GAME_DEAL_CARD", self.player_cards[player.account])
+        local beginIndex = (i-1)*ONE_GROUP_CARD_NUM+1
+        local endIndex = beginIndex + ONE_GROUP_CARD_NUM - 1
+        table.move(cards,beginIndex,endIndex,1,self.player_cards[player.account])
+
+        local ret = {
+            ["turn"] = self.turn,
+            ["cards"] = self.player_cards[player.account]
+        }
+
+        skynet.call(base_app, "lua", "sendto_client", player.account, "GAME_DEAL_CARD", ret)
     end
 end
 
@@ -112,7 +122,8 @@ end
 local function check_solution(indexs)
     local indexErrorCode = msg_define.getError("INDEXS_ERROR")
     if not #indexs == ONE_GROUP_CARD_NUM then
-        return { errCode = indexErrorCode };
+        return { errCode = indexErrorCode }
+    end
     
     for i = 1, ONE_GROUP_CARD_NUM do
         local findFlag = false
@@ -129,8 +140,8 @@ local function check_solution(indexs)
 end
 
 
-local function M:isSolutionFull()
-    for _, solution in self.player_solutions then
+function M:isSolutionFull()
+    for _, solution in self.player_solutions do
         if solution == nil then
             return false;
         end
@@ -185,7 +196,7 @@ function M:compare3(a,b)
 end
 
 
-local function M:getScoreList(ids)
+function M:getScoreList(ids)
     local scoreList = {}
     for i,v in ids do
         if i == 1 then

@@ -15,7 +15,18 @@ local id_tbl = {
     -- 游戏
     {name = "GAME_DEAL_CARD"},                          -- 发牌
     {name = "GAME_CARD_SOLUTION"},                      -- 打牌
+    {name = "GAME_RESULT"},                             -- 结果
 }
+
+local error_tbl = {
+    ["INDEXS_ERROR"] = 1100,
+
+}
+
+function M.getError(name)
+    return error_tbl[name]
+end
+
 
 
 local name_tbl = {}

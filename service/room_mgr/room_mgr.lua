@@ -20,7 +20,6 @@ function M:create(game_id, player_info)
     local id = id_mgr:gen_id(game_id)
     self.room_tbl[id] = room.new(id, game_id, player_info)
     self.player_2_room[player_info.account] = id
-    skynet.error("room mgr create")
 
     ret.roomId = id
     return ret
@@ -45,6 +44,17 @@ function M:change_state(room_id, player_info)
     room:state_change(player_info)
     return ret 
 end
+
+function M:deal_card(player_info)
+    local room_id = self.player_2_room[player_info.account]
+    local room = self.room_tbl[room_id]
+    if not room then
+        return false
+    end
+
+    room:deal_card(player_info)
+end
+
 
 
 function M:close(room_id)

@@ -25,6 +25,10 @@ function CMD.room_begin(room_id)
     room_mgr:room_begin(room_id)
 end
 
+function CMD.deal_card(player_info)
+    room_mgr:deal_card(player_info)
+end
+
 local function dispatch(_, session, cmd, ...)
     local f = CMD[cmd]
     assert(f, "room_mgr接收到非法lua消息: "..cmd)

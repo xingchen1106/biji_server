@@ -22,4 +22,12 @@ function M.JOIN_ROOM_CMD(fd, request)
     return ret
 end
 
+function M.GAME_DEAL_CARD(fd, request)
+    local player = player_mgr:get_by_fd(fd)
+local ret = skynet.call("room_mgr", "lua", "deal_card", player:pack())
+    return ret
+end
+
+
+
 return M

@@ -15,7 +15,8 @@ function M:gen_id(game_id)
     local ids = v.ids
     local id = nil
     while true do
-        id = game_id * 1000000 + math.random(1,999999)
+        --id = game_id * 1000000 + math.random(1,999999)
+        id = 1
         if not ids[id] then
             ids[id] = os.time()
             break
